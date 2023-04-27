@@ -18,6 +18,15 @@ class BaseModel():
         model = self.__class__.__name__
         return db_get(model)
 
+    def filter(self, **kwargs):
+        model = self.__class__.__name__
+        if not kwargs:
+            raise TypeError(f"{model}.filter() must accept "
+                            f"at least 1 named argument")
+        if self.__validate_fields(fields=kwargs):
+            values = db_get(model, filter_fields=kwargs)
+            return values
+
 
 class Task(BaseModel):
     _fields = {'text': str()}
